@@ -1,35 +1,28 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Twitch Account Switcher</title>
-  <link rel="stylesheet" href="popup.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Switchr</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-  <div class="header">
-    <span class="logo">&#9582;</span>
-    <span class="title">Twitch Accounts</span>
+  <div class="title-bar">
+    <div class="logo-mark"><div class="logo-dot"></div></div>
+    <span class="title-label">SWITCHR</span>
+    <div style="flex:1"></div>
+    <button class="theme-toggle" id="themeToggle" title="Theme wechseln"></button>
+    <div class="indicator-dots" id="indicatorDots"></div>
   </div>
 
-  <ul class="slot-list" id="slotList">
-    <!-- rendered by popup.js -->
-  </ul>
+  <div id="mainContent"></div>
 
   <div class="footer">
-    <div class="footer-default" id="footerDefault">
-      <button class="btn-add" id="btnAdd">+ Account hinzufügen</button>
-      <span class="pro-hint hidden" id="proHint">🔒 Pro für mehr Accounts</span>
-    </div>
-    <div class="footer-add hidden" id="footerAdd">
-      <input type="text" class="add-input" id="addInput" placeholder="Account-Name..." maxlength="30" />
-      <button class="btn btn-confirm" id="addConfirm">✓</button>
-      <button class="btn btn-cancel" id="addCancel">✕</button>
-    </div>
+    <span class="footer-count" id="footerCount"></span>
   </div>
 
   <div class="toast hidden" id="toast"></div>
-
   <script src="popup.js"></script>
 </body>
 </html>

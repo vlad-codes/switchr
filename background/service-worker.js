@@ -1,9 +1,3 @@
-const MAX_FREE_SLOTS = 2;
-
-function isPremium() {
-  return false; // stub — replace with entitlement check when monetization is added
-}
-
 function generateId() {
   return crypto.randomUUID();
 }
@@ -108,10 +102,6 @@ async function handleSwitchToSlot({ slotId }) {
 
 async function handleAddSlot({ label }) {
   const { slots, activeSlotId } = await getStorage();
-
-  if (!isPremium() && slots.length >= MAX_FREE_SLOTS) {
-    return { ok: false, error: 'LIMIT_REACHED' };
-  }
 
   const newSlot = {
     id: generateId(),

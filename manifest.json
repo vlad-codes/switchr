@@ -8,6 +8,14 @@
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
+  "content_scripts": [
+    {
+      "matches": ["*://www.twitch.tv/*", "*://twitch.tv/*"],
+      "js": ["content/content.js"],
+      "css": ["content/content.css"],
+      "run_at": "document_idle"
+    }
+  ],
   "background": {
     "service_worker": "background/service-worker.js"
   },
