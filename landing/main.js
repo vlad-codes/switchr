@@ -1,6 +1,6 @@
 /* ── GitHub URL (set once, applied to all CTA links) ────────────── */
 const GITHUB_URL = '#'; // TODO: replace with https://github.com/USER/REPO after pushing
-document.querySelectorAll('[data-store-link]').forEach(a => { a.href = GITHUB_URL; });
+document.querySelectorAll('[data-store-link]').forEach(a => { a.href = "https://github.com/vlad-codes/switchr"; });
 
 /* ── i18n ─────────────────────────────────────────────────────── */
 const STRINGS = {
