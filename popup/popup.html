@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Twitch Account Switcher</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="header">
+    <span class="logo">&#9582;</span>
+    <span class="title">Twitch Accounts</span>
+  </div>
+
+  <ul class="slot-list" id="slotList">
+    <!-- rendered by popup.js -->
+  </ul>
+
+  <div class="footer">
+    <div class="footer-default" id="footerDefault">
+      <button class="btn-add" id="btnAdd">+ Account hinzufügen</button>
+      <span class="pro-hint hidden" id="proHint">🔒 Pro für mehr Accounts</span>
+    </div>
+    <div class="footer-add hidden" id="footerAdd">
+      <input type="text" class="add-input" id="addInput" placeholder="Account-Name..." maxlength="30" />
+      <button class="btn btn-confirm" id="addConfirm">✓</button>
+      <button class="btn btn-cancel" id="addCancel">✕</button>
+    </div>
+  </div>
+
+  <div class="toast hidden" id="toast"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

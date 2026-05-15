@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Switchr</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .legal-wrap { max-width: 680px; margin: 0 auto; padding: 64px 16px 80px; }
+    .legal-back { display: inline-flex; align-items: center; gap: 6px; color: var(--sub); font-size: 13px; margin-bottom: 40px; transition: color 0.12s; }
+    .legal-back:hover { color: var(--accent); }
+    .legal-label { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; }
+    .legal-title { font-size: clamp(22px, 3vw, 32px); font-weight: 700; letter-spacing: -0.02em; color: var(--text); margin-bottom: 8px; }
+    .legal-date  { font-size: 12px; color: var(--sub); margin-bottom: 48px; }
+    .legal-section { margin-bottom: 36px; }
+    .legal-section h2 { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 10px; letter-spacing: 0.02em; }
+    .legal-section p, .legal-section li { font-size: 13px; color: var(--sub); line-height: 1.85; }
+    .legal-section ul { padding-left: 18px; margin-top: 8px; }
+    .legal-section li { margin-bottom: 4px; }
+    .legal-section a { color: var(--accent); }
+    .legal-section a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <nav class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-mark"><div class="logo-dot"></div></div>
+        <span class="nav-wordmark">SWITCHR</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="legal-wrap">
+    <a href="index.html" class="legal-back">← Back to switchr</a>
+    <p class="legal-label">Legal</p>
+    <h1 class="legal-title">Privacy Policy</h1>
+    <p class="legal-date">Last updated: May 2025</p>
+
+    <div class="legal-section">
+      <h2>1. Overview</h2>
+      <p>Switchr is a browser extension that runs entirely on your device. It does not transmit any data to external servers and does not collect any personal information.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>2. Data stored locally</h2>
+      <p>Switchr stores the following data exclusively in your browser using the <strong>Chrome Storage API</strong> (<code>chrome.storage.local</code>):</p>
+      <ul>
+        <li>Account slot names (labels you choose)</li>
+        <li>Twitch session cookies associated with each slot</li>
+        <li>The ID of the currently active slot</li>
+      </ul>
+      <p>This data never leaves your device and is not accessible to any third party, including the developer of Switchr.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>3. Cookies</h2>
+      <p>Switchr reads and writes Twitch session cookies in your browser in order to switch between accounts. These cookies are issued by Twitch and governed by <a href="https://www.twitch.tv/p/legal/privacy-notice/" target="_blank" rel="noopener">Twitch's Privacy Notice</a>. Switchr does not create, share or sell any cookies of its own.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>4. Analytics &amp; tracking</h2>
+      <p>Switchr contains no analytics, crash reporting, telemetry, or any other form of tracking.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>5. Permissions used</h2>
+      <ul>
+        <li><strong>cookies</strong> — to read and restore Twitch session cookies</li>
+        <li><strong>storage</strong> — to persist slot data locally</li>
+        <li><strong>tabs</strong> — to reload Twitch tabs after switching accounts</li>
+        <li><strong>host_permissions (twitch.tv)</strong> — to access cookies scoped to twitch.tv</li>
+      </ul>
+    </div>
+
+    <div class="legal-section">
+      <h2>6. Third-party services</h2>
+      <p>The landing page (this website) loads the JetBrains Mono font from Google Fonts. This request is subject to <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>. The extension itself does not make any external network requests.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>7. Your rights</h2>
+      <p>Since Switchr stores no personal data on any server, there is nothing to request, correct or delete from our side. All data is under your full control — you can clear it at any time by removing the extension or clearing extension storage in your browser settings.</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>8. Contact</h2>
+      <p>For questions regarding this privacy policy, open an issue in the GitHub repository.</p>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 80);
+    }, { passive: true });
+  </script>
+</body>
+</html>

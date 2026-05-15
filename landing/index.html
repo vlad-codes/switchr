@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Switchr — Twitch Account Switcher</title>
+  <meta name="description" content="Switch between multiple Twitch accounts instantly. Chrome Extension.">
+  <link rel="icon" href="../icons/icon16.png" sizes="16x16">
+  <link rel="icon" href="../icons/icon48.png" sizes="48x48">
+  <link rel="apple-touch-icon" href="../icons/icon128.png">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ── Nav ──────────────────────────────────────────────────────── -->
+  <nav class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo">
+        <div class="logo-mark"><div class="logo-dot"></div></div>
+        <span class="nav-wordmark">SWITCHR</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features" data-i18n="nav_features">Features</a>
+        <a href="#faq"      data-i18n="nav_faq">FAQ</a>
+      </div>
+      <div class="nav-right">
+        <button class="lang-toggle" id="langToggle">DE</button>
+        <a href="#" class="btn-primary nav-cta" data-store-link target="_blank" rel="noopener">
+          <img src="../icons/icon16.png" alt="" width="14" height="14">
+          <span data-i18n="nav_cta">Install for free</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Hero ─────────────────────────────────────────────────────── -->
+  <section class="section hero" id="hero">
+    <div class="hero-glow"></div>
+    <div class="grid-bg"></div>
+    <div class="container hero-inner">
+
+      <div class="hero-text">
+        <div class="hero-eyebrow reveal">
+          <div class="logo-mark"><div class="logo-dot"></div></div>
+          <span data-i18n="hero_eyebrow">Chrome Extension · Free</span>
+        </div>
+        <h1 class="hero-headline reveal reveal-delay-1">
+          <span data-i18n="hero_h1_line1">Multiple Twitch accounts.</span><br>
+          <span class="accent-text" data-i18n="hero_h1_line2">One click.</span>
+        </h1>
+        <p class="hero-sub reveal reveal-delay-2" data-i18n="hero_sub">
+          Switchr lets you switch between your Twitch accounts instantly — right
+          from the browser popup or the widget built into twitch.tv.
+        </p>
+        <div class="hero-actions reveal reveal-delay-3">
+          <a href="#" class="btn-primary" data-store-link target="_blank" rel="noopener">
+            <img src="../icons/icon16.png" alt="" width="14" height="14">
+            <span data-i18n="hero_cta_primary">Install for free</span>
+          </a>
+          <a href="#faq" class="btn-ghost">
+            <span data-i18n="hero_cta_ghost">How to install →</span>
+          </a>
+        </div>
+        <p class="hero-proof reveal reveal-delay-4">
+          <span class="proof-dot"></span>
+          <span data-i18n="hero_proof">Free · Unlimited accounts · No sign-up required</span>
+        </p>
+      </div>
+
+      <!-- dual visual -->
+      <div class="hero-visual reveal reveal-delay-2">
+        <div class="popup-shell visual-popup">
+          <div class="pm-title-bar">
+            <div class="logo-mark"><div class="logo-dot"></div></div>
+            <span class="pm-title">SWITCHR</span>
+            <div style="flex:1"></div>
+            <div class="pm-dots">
+              <div class="pm-dot active"></div>
+              <div class="pm-dot"></div>
+            </div>
+          </div>
+          <div class="pm-hero-card">
+            <div class="pm-monogram pm-monogram-lg" id="heroMonogram">S</div>
+            <div class="pm-name-col">
+              <div class="pm-name" id="heroName">streamer_main</div>
+              <div class="pm-status-row">
+                <span class="pm-status-dot"></span>
+                <span class="pm-status-label" data-i18n="popup_active">Active</span>
+              </div>
+            </div>
+          </div>
+          <div class="pm-accounts">
+            <div class="pm-row">
+              <div class="pm-monogram pm-monogram-sm" id="altMonogram">A</div>
+              <span class="pm-row-name" id="altName">alt_account</span>
+              <button class="pm-btn-switch">switch</button>
+            </div>
+          </div>
+          <div class="pm-add-row">
+            <div class="pm-add-icon">+</div>
+            <span class="pm-add-label" data-i18n="popup_add">Add account</span>
+          </div>
+          <div class="pm-footer">
+            <span class="pm-count" data-i18n="popup_count">2 accounts</span>
+          </div>
+        </div>
+
+        <div class="twitch-shell visual-twitch">
+          <div class="tw-menu">
+            <div class="tw-item tw-item-user">
+              <div class="tw-avatar">S</div>
+              <div class="tw-user-info">
+                <span class="tw-username" id="twUsername">streamer_main</span>
+                <span class="tw-usersub" data-i18n="tw_view">View Channel</span>
+              </div>
+            </div>
+            <div class="tw-divider"></div>
+            <div class="sw-widget">
+              <div class="sw-header">
+                <div class="sw-dot"></div>
+                <span>SWITCHR</span>
+              </div>
+              <div class="sw-list">
+                <div class="sw-row sw-active">
+                  <div class="sw-mono">S</div>
+                  <span class="sw-name" id="twActive">streamer_main</span>
+                  <span class="sw-badge">active</span>
+                </div>
+                <div class="sw-row">
+                  <div class="sw-mono">A</div>
+                  <span class="sw-name" id="twAlt">alt_account</span>
+                  <button class="sw-btn">switch</button>
+                </div>
+              </div>
+            </div>
+            <div class="tw-divider"></div>
+            <div class="tw-item"><span data-i18n="tw_settings">Settings</span></div>
+            <div class="tw-item"><span data-i18n="tw_logout">Log Out</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="glow-divider"></div>
+
+  <!-- ── Features + Steps ─────────────────────────────────────────── -->
+  <section class="section" id="features">
+    <div class="container">
+
+      <div class="feat-list reveal">
+        <div class="feat-item reveal-delay-1">
+          <span class="feat-icon">⚡</span>
+          <span class="feat-text"><strong data-i18n="feat1_title">Instant switch</strong><span class="feat-sep"> — </span><span data-i18n="feat1_short">one click, no re-login</span></span>
+        </div>
+        <div class="feat-item reveal-delay-2">
+          <span class="feat-icon">🧩</span>
+          <span class="feat-text"><strong data-i18n="feat2_title">Twitch widget</strong><span class="feat-sep"> — </span><span data-i18n="feat2_short">switch right from twitch.tv</span></span>
+        </div>
+        <div class="feat-item reveal-delay-3">
+          <span class="feat-icon">🔒</span>
+          <span class="feat-text"><strong data-i18n="feat3_title">Local & private</strong><span class="feat-sep"> — </span><span data-i18n="feat3_short">no servers, your browser only</span></span>
+        </div>
+        <div class="feat-item reveal-delay-4">
+          <span class="feat-icon">∞</span>
+          <span class="feat-text"><strong data-i18n="feat4_title">Unlimited accounts</strong><span class="feat-sep"> — </span><span data-i18n="feat4_short">no limits, no sign-up</span></span>
+        </div>
+      </div>
+
+      <div class="steps-strip reveal">
+        <div class="step-item">
+          <span class="step-n">01</span>
+          <span data-i18n="step1_title">Install the extension</span>
+        </div>
+        <span class="step-arrow">→</span>
+        <div class="step-item">
+          <span class="step-n">02</span>
+          <span data-i18n="step2_title">Add your accounts</span>
+        </div>
+        <span class="step-arrow">→</span>
+        <div class="step-item">
+          <span class="step-n">03</span>
+          <span data-i18n="step3_title">Switch instantly</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="glow-divider"></div>
+
+  <!-- ── FAQ ──────────────────────────────────────────────────────── -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-label" data-i18n="faq_label">FAQ</p>
+        <h2 class="section-title" data-i18n="faq_title">Common questions.</h2>
+      </div>
+      <div class="faq-list reveal">
+
+        <details class="faq-item">
+          <summary class="faq-q"><span data-i18n="faq0_q">How do I install Switchr?</span><span class="faq-icon">+</span></summary>
+          <p class="faq-a" data-i18n="faq0_a">Download the ZIP from the GitHub releases page and unpack it. Then open Chrome and go to <strong>chrome://extensions</strong>, enable <strong>Developer mode</strong> (top right), click <strong>Load unpacked</strong> and select the unpacked folder. Done — the Switchr icon appears in your toolbar.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q"><span data-i18n="faq1_q">Is Switchr safe to use?</span><span class="faq-icon">+</span></summary>
+          <p class="faq-a" data-i18n="faq1_a">Yes. Switchr stores session cookies locally in your browser using the Chrome Storage API. Your credentials never leave your device — there are no external servers involved.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q"><span data-i18n="faq2_q">Does it work on all Twitch pages?</span><span class="faq-icon">+</span></summary>
+          <p class="faq-a" data-i18n="faq2_a">The browser popup works anywhere. The in-page widget is injected directly into the Twitch user dropdown menu, so it appears whenever you open your profile menu on twitch.tv.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q"><span data-i18n="faq3_q">Will it log me out of my current session?</span><span class="faq-icon">+</span></summary>
+          <p class="faq-a" data-i18n="faq3_a">Switching replaces the active session cookies with the saved ones for the selected account. Your previous session is preserved in Switchr and can be restored at any time with one click.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q"><span data-i18n="faq4_q">How many accounts can I add?</span><span class="faq-icon">+</span></summary>
+          <p class="faq-a" data-i18n="faq4_a">You can add as many accounts as you want — there is no limit.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q"><span data-i18n="faq5_q">Does this violate Twitch's Terms of Service?</span><span class="faq-icon">+</span></summary>
+          <p class="faq-a" data-i18n="faq5_a">Switchr uses only session cookies that are already set by Twitch in your browser. It does not automate any actions or bypass security measures. That said, use it at your own discretion.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q"><span data-i18n="faq6_q">What browsers are supported?</span><span class="faq-icon">+</span></summary>
+          <p class="faq-a" data-i18n="faq6_a">Switchr is built for Chrome (Manifest V3). It also works on other Chromium-based browsers like Brave, Edge, and Arc.</p>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ───────────────────────────────────────────────────── -->
+  <footer class="footer-main">
+    <div class="glow-divider"></div>
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <div class="logo-mark"><div class="logo-dot"></div></div>
+          <span class="footer-wordmark">SWITCHR</span>
+        </div>
+        <p class="footer-tagline" data-i18n="footer_tagline">Twitch Account Switcher for Chrome</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <span class="footer-col-title" data-i18n="footer_ext">Extension</span>
+          <a href="#" data-store-link target="_blank" rel="noopener" data-i18n="footer_store">GitHub</a>
+          <a href="#features" data-i18n="nav_features">Features</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title" data-i18n="footer_legal">Legal</span>
+          <a href="privacy.html" data-i18n="footer_privacy">Privacy</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <span data-i18n="footer_copy">© 2025 Switchr. Not an official Twitch product.</span>
+        <span data-i18n="footer_made">Made with ♥ for the Twitch community</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
