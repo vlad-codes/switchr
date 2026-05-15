@@ -26,7 +26,7 @@ Switchr saves Twitch session cookies per slot and swaps them on switch. All data
 
 ## Privacy
 
-Switchr stores session cookies locally via the Chrome Storage API. Nothing leaves your device. See [landing/privacy.html](landing/privacy.html) for the full privacy policy.
+Switchr stores session cookies locally via the Chrome Storage API. Nothing leaves your device. See [docs/privacy.html](docs/privacy.html) for the full privacy policy.
 
 ## License
 
