@@ -153,7 +153,7 @@
       <div class="feat-list reveal">
         <div class="feat-item reveal-delay-1">
           <span class="feat-icon">⚡</span>
-          <span class="feat-text"><strong data-i18n="feat1_title">Instant switch</strong><span class="feat-sep"> — </span><span data-i18n="feat1_short">one click, no re-login</span></span>
+          <span class="feat-text"><strong data-i18n="feat1_title">Instant switch</strong><span class="feat-sep"> — </span><span data-i18n="feat1_short">one click for saved sessions</span></span>
         </div>
         <div class="feat-item reveal-delay-2">
           <span class="feat-icon">🧩</span>
@@ -207,7 +207,7 @@
 
         <details class="faq-item">
           <summary class="faq-q"><span data-i18n="faq1_q">Is Switchr safe to use?</span><span class="faq-icon">+</span></summary>
-          <p class="faq-a" data-i18n="faq1_a">Yes. Switchr stores session cookies locally in your browser using the Chrome Storage API. Your credentials never leave your device — there are no external servers involved.</p>
+          <p class="faq-a" data-i18n="faq1_a">Switchr stores session cookies locally in your browser and restricts them to trusted extension contexts. Saved sessions are not uploaded or synced. Your browser still sends active cookies to Twitch as part of normal browsing.</p>
         </details>
 
         <details class="faq-item">
@@ -217,7 +217,7 @@
 
         <details class="faq-item">
           <summary class="faq-q"><span data-i18n="faq3_q">Will it log me out of my current session?</span><span class="faq-icon">+</span></summary>
-          <p class="faq-a" data-i18n="faq3_a">Switching replaces the active session cookies with the saved ones for the selected account. Your previous session is preserved in Switchr and can be restored at any time with one click.</p>
+          <p class="faq-a" data-i18n="faq3_a">Switchr saves your current session before switching and reloads all Twitch tabs in the profile. A failed cookie restoration rolls back to your previous cookies. Twitch can expire or revoke sessions; use Manage → Sign in again if a saved session no longer works.</p>
         </details>
 
         <details class="faq-item">
@@ -232,7 +232,7 @@
 
         <details class="faq-item">
           <summary class="faq-q"><span data-i18n="faq6_q">What browsers are supported?</span><span class="faq-icon">+</span></summary>
-          <p class="faq-a" data-i18n="faq6_a">Switchr is built for Chrome (Manifest V3). It also works on other Chromium-based browsers like Brave, Edge, and Arc.</p>
+          <p class="faq-a" data-i18n="faq6_a">Switchr requires Chrome 130+ or a compatible Chromium-based browser such as Brave, Edge or Arc. Incognito is not supported.</p>
         </details>
 
       </div>

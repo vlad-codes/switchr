@@ -1,28 +1,21 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Switchr</title>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-  <div class="title-bar">
-    <div class="logo-mark"><div class="logo-dot"></div></div>
-    <span class="title-label">SWITCHR</span>
-    <div style="flex:1"></div>
-    <button class="theme-toggle" id="themeToggle" title="Theme wechseln"></button>
-    <div class="indicator-dots" id="indicatorDots"></div>
-  </div>
-
-  <div id="mainContent"></div>
-
-  <div class="footer">
-    <span class="footer-count" id="footerCount"></span>
-  </div>
-
-  <div class="toast hidden" id="toast"></div>
+  <header class="title-bar">
+    <div class="logo-mark" aria-hidden="true">s<span>↗</span></div>
+    <span class="title-label">switchr</span>
+    <span class="account-count" id="accountCount"></span>
+    <button class="icon-button" id="themeToggle" aria-label="Change color theme" title="Change color theme">◐</button>
+  </header>
+  <main id="mainContent" aria-busy="true"><p class="loading">Checking your browser session…</p></main>
+  <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+  <footer><span class="local-label">Local only</span><button class="text-button" id="openTwitch">Open Twitch ↗</button></footer>
   <script src="popup.js"></script>
 </body>
 </html>

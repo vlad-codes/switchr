@@ -1,0 +1,15 @@
+{
+  "description": "Switchr: a local Twitch account switching browser extension",
+  "status": "paused",
+  "devCommand": "",
+  "devPort": null,
+  "url": "",
+  "roadmap": ["Verify real Twitch authentication and live profile-menu integration"],
+  "ideas": [],
+  "notes": [
+    {
+      "date": "2026-10-02",
+      "text": "Modernized session capture, guided login and rollback recovery; redesigned the popup. Version 1.1.0 passes 22 session tests and 14 isolated Chromium browser scenarios."
+    }
+  ]
+}

@@ -13,3 +13,7 @@
 
 # Logs
 *.log
+
+# Local QA browsers, profiles and screenshots
+.qa/
+node_modules/
