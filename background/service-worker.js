@@ -4,8 +4,11 @@ const TWITCH_URL = 'https://www.twitch.tv/';
 const TAB_URLS = ['*://*.twitch.tv/*', '*://twitch.tv/*'];
 const STORAGE_KEYS = ['slots', 'activeSlotId', 'pendingLogin', 'cookieTransaction'];
 
-// Session credentials are only available to the worker and extension pages.
-const ready = chrome.storage.local.setAccessLevel({ accessLevel: 'TRUSTED_CONTEXTS' });
+const isFirefox = typeof firefoxStorage !== 'undefined';
+const extension = isFirefox ? browser : chrome;
+const storage = isFirefox ? firefoxStorage : extension.storage.local;
+const ready = isFirefox ? Promise.resolve() : storage.setAccessLevel({ accessLevel: 'TRUSTED_CONTEXTS' });
+const defaultStoreId = isFirefox ? 'firefox-default' : '0';
 let queue = Promise.resolve();
 function enqueue(task) {
   const result = queue.then(() => ready).then(task);
@@ -14,7 +17,7 @@ function enqueue(task) {
 }
 function fail(code) { throw new Error(code); }
 async function getStorage() {
-  const data = await chrome.storage.local.get(STORAGE_KEYS);
+  const data = await storage.get(STORAGE_KEYS);
   return { slots: [], activeSlotId: null, pendingLogin: null, ...data };
 }
 function cookieURL(cookie) {
@@ -47,7 +50,9 @@ function loginName(cookies = []) {
 }
 async function getCookies() {
   // Regular profile only; incognito access is disabled in the manifest.
-  return chrome.cookies.getAll({ domain: 'twitch.tv', partitionKey: {} });
+  const details = { domain: 'twitch.tv', partitionKey: {} };
+  if (isFirefox) details.storeId = defaultStoreId;
+  return extension.cookies.getAll(details);
 }
 function matchedSlot(slots, cookies) {
   const token = authCookie(cookies)?.value;
@@ -63,9 +68,9 @@ async function snapshotCurrent(state, cookies) {
   if (slot) {
     if (JSON.stringify(slot.cookies) !== JSON.stringify(cookies) || (!slot.login && loginName(cookies))) {
       snapshot(slot, cookies);
-      await chrome.storage.local.set({ slots: state.slots, activeSlotId: slot.id });
+      await storage.set({ slots: state.slots, activeSlotId: slot.id });
     } else if (state.activeSlotId !== slot.id) {
-      await chrome.storage.local.set({ activeSlotId: slot.id });
+      await storage.set({ activeSlotId: slot.id });
     }
   }
   return slot;
@@ -76,30 +81,33 @@ async function clearCookies() {
     const details = { url: cookieURL(cookie), name: cookie.name };
     if (cookie.storeId) details.storeId = cookie.storeId;
     if (cookie.partitionKey) details.partitionKey = cookie.partitionKey;
-    await chrome.cookies.remove(details);
+    await extension.cookies.remove(details);
   }
   if ((await getCookies()).length) fail('COOKIE_CLEAR_FAILED');
 }
 async function restoreCookies(cookies) {
   for (const cookie of cookies.filter(isLive)) {
-    const restored = await chrome.cookies.set(cookieToSetDetails(cookie));
+    const restored = await extension.cookies.set(cookieToSetDetails(cookie));
     if (!restored) fail('COOKIE_RESTORE_FAILED');
   }
 }
 async function verifyAuth(cookies) {
   const expected = authCookie(cookies)?.value;
-  const actual = await chrome.cookies.get({ url: TWITCH_URL, name: 'auth-token' });
+  const details = { url: TWITCH_URL, name: 'auth-token' };
+  if (isFirefox) details.storeId = defaultStoreId;
+  const actual = await extension.cookies.get(details);
   if ((actual?.value || null) !== (expected || null)) fail('COOKIE_RESTORE_FAILED');
 }
 async function reloadTabs({ open = false, login = false } = {}) {
   let tabs = [];
   let warning = false;
-  try { tabs = await chrome.tabs.query({ url: TAB_URLS }); }
+  try { tabs = await extension.tabs.query({ url: TAB_URLS }); }
   catch { warning = true; }
-  const results = await Promise.allSettled(tabs.map(tab => chrome.tabs.reload(tab.id)));
+  if (isFirefox) tabs = tabs.filter(tab => tab.cookieStoreId === defaultStoreId);
+  const results = await Promise.allSettled(tabs.map(tab => extension.tabs.reload(tab.id)));
   warning ||= results.some(result => result.status === 'rejected');
   if (open) {
-    try { await chrome.tabs.create({ url: login ? `${TWITCH_URL}login` : TWITCH_URL }); }
+    try { await extension.tabs.create({ url: login ? `${TWITCH_URL}login` : TWITCH_URL }); }
     catch { warning = true; }
   }
   return { noTabs: tabs.length === 0 && !open, reloadWarning: warning };
@@ -112,23 +120,23 @@ async function recoverTransaction() {
     await clearCookies();
     await restoreCookies(transaction.cookies);
     await verifyAuth(transaction.cookies);
-    await chrome.storage.local.set({ activeSlotId: transaction.activeSlotId, pendingLogin: transaction.pendingLogin });
-    await chrome.storage.local.remove('cookieTransaction');
+    await storage.set({ activeSlotId: transaction.activeSlotId, pendingLogin: transaction.pendingLogin });
+    await storage.remove('cookieTransaction');
     await reloadTabs();
   } catch { fail('RECOVERY_FAILED'); }
 }
 async function replaceCookies(cookies, updates) {
   const state = await getStorage();
   const original = await getCookies();
-  await chrome.storage.local.set({ cookieTransaction: {
+  await storage.set({ cookieTransaction: {
     cookies: original, activeSlotId: state.activeSlotId, pendingLogin: state.pendingLogin,
   } });
   try {
     await clearCookies();
     await restoreCookies(cookies);
     await verifyAuth(cookies);
-    await chrome.storage.local.set(updates);
-    await chrome.storage.local.remove('cookieTransaction');
+    await storage.set(updates);
+    await storage.remove('cookieTransaction');
   } catch {
     await recoverTransaction();
     fail('SWITCH_FAILED');
@@ -174,7 +182,7 @@ async function saveCurrent({ slotId, label } = {}) {
     state.slots.push(slot);
   }
   snapshot(slot, cookies);
-  await chrome.storage.local.set({ slots: state.slots, activeSlotId: slot.id, pendingLogin: null });
+  await storage.set({ slots: state.slots, activeSlotId: slot.id, pendingLogin: null });
   return { ok: true, slot: publicSlot(slot, slot.id) };
 }
 async function switchSlot({ slotId }) {
@@ -229,14 +237,14 @@ async function renameSlot({ slotId, label }) {
   if (!slot) fail('SLOT_NOT_FOUND');
   if (!cleanLabel(label)) fail('INVALID_LABEL');
   slot.label = cleanLabel(label);
-  await chrome.storage.local.set({ slots: state.slots });
+  await storage.set({ slots: state.slots });
   return { ok: true };
 }
 async function deleteSlot({ slotId }) {
   const state = await getStorage();
   if (state.pendingLogin) fail('LOGIN_IN_PROGRESS');
   if (!state.slots.some(slot => slot.id === slotId)) fail('SLOT_NOT_FOUND');
-  await chrome.storage.local.set({
+  await storage.set({
     slots: state.slots.filter(slot => slot.id !== slotId),
     activeSlotId: state.activeSlotId === slotId ? null : state.activeSlotId,
   });
@@ -253,10 +261,11 @@ const errors = new Set([
   'ACCOUNT_ALREADY_SAVED', 'IDENTITY_UNKNOWN', 'LOGIN_IN_PROGRESS', 'NO_LOGIN_IN_PROGRESS',
   'UNSAVED_SESSION', 'SWITCH_FAILED', 'RECOVERY_FAILED', 'INVALID_LABEL',
 ]);
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  const fromPopup = sender.id === chrome.runtime.id && sender.url === chrome.runtime.getURL('popup/popup.html');
-  const fromTwitch = sender.id === chrome.runtime.id && sender.tab &&
-    /^https?:\/\/(www\.)?twitch\.tv\//.test(sender.url || '') && sender.frameId === 0 && !sender.tab.incognito;
+extension.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  const fromPopup = sender.id === extension.runtime.id && sender.url === extension.runtime.getURL('popup/popup.html');
+  const fromTwitch = sender.id === extension.runtime.id && sender.tab &&
+    /^https?:\/\/(www\.)?twitch\.tv\//.test(sender.url || '') && sender.frameId === 0 && !sender.tab.incognito &&
+    (!isFirefox || sender.tab.cookieStoreId === defaultStoreId);
   // Twitch content scripts receive only metadata and can only request switching.
   if (!fromPopup && !(fromTwitch && ['GET_STATE', 'SWITCH_TO_SLOT'].includes(message?.type))) {
     sendResponse({ ok: false, error: 'FORBIDDEN' });
@@ -274,8 +283,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   return true;
 });
 // Keep known sessions fresh without assigning an unknown login to a saved account.
-chrome.cookies.onChanged.addListener(({ cookie, removed }) => {
-  if (removed || cookie.partitionKey || !/(^|\.)twitch\.tv$/.test(cookie.domain) || cookie.storeId !== '0') return;
+extension.cookies.onChanged.addListener(({ cookie, removed }) => {
+  if (removed || cookie.partitionKey || !/(^|\.)twitch\.tv$/.test(cookie.domain) || cookie.storeId !== defaultStoreId) return;
   enqueue(async () => {
     const state = await getStorage();
     if (state.cookieTransaction || state.pendingLogin) return;
@@ -283,6 +292,6 @@ chrome.cookies.onChanged.addListener(({ cookie, removed }) => {
   }).catch(() => {});
 });
 
-chrome.runtime.onStartup.addListener(() => {
+extension.runtime.onStartup.addListener(() => {
   enqueue(recoverTransaction).catch(() => {});
 });

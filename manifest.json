@@ -19,7 +19,15 @@
     }
   ],
   "background": {
-    "service_worker": "background/service-worker.js"
+    "service_worker": "background/service-worker.js",
+    "scripts": ["background/firefox-storage.js", "background/service-worker.js"]
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "switchr@vlad-codes",
+      "strict_min_version": "128.0",
+      "data_collection_permissions": { "required": ["none"] }
+    }
   },
   "action": {
     "default_popup": "popup/popup.html",

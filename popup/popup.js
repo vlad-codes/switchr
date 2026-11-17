@@ -35,7 +35,7 @@ const errors = {
 };
 function errorMessage(code) { return errors[code] || 'Could not complete that action. Reload the extension and try again.'; }
 async function send(type, payload = {}) {
-  const response = await chrome.runtime.sendMessage({ type, payload });
+  const response = await (globalThis.browser || chrome).runtime.sendMessage({ type, payload });
   if (!response?.ok) throw new Error(response?.error || 'OPERATION_FAILED');
   return response;
 }
@@ -235,7 +235,7 @@ async function refresh() {
   }
 }
 document.getElementById('openTwitch').addEventListener('click', () => action('OPEN_TWITCH', {}, 'Twitch opened.'));
-chrome.storage.onChanged.addListener((_changes, area) => { if (area === 'local' && !busy && !editing) refresh(); });
+chrome.storage?.onChanged.addListener((_changes, area) => { if (area === 'local' && !busy && !editing) refresh(); });
 window.addEventListener('focus', () => { if (!busy && !editing) refresh(); });
 document.addEventListener('keydown', event => {
   if (event.key !== 'Escape' || editing || !expandedSlotId) return;

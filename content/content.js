@@ -7,7 +7,7 @@
   let invalidated = false;
 
   async function send(type, payload = {}) {
-    const response = await chrome.runtime.sendMessage({ type, payload });
+    const response = await (globalThis.browser || chrome).runtime.sendMessage({ type, payload });
     if (!response?.ok) throw new Error(response?.error || 'OPERATION_FAILED');
     return response;
   }

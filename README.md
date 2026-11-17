@@ -4,7 +4,7 @@ Switch between saved Twitch accounts from your browser toolbar or Twitch profile
 
 ## Install or update
 
-Requires Chrome 130+ or a compatible Chromium browser (Edge, Brave, Arc). Incognito is not supported because it has a separate cookie store.
+For Chromium, use Chrome 130+ or a compatible Chromium browser (Edge, Brave, Arc). Incognito is not supported because it has a separate cookie store.
 
 1. Download and unpack the extension, or use this repository folder.
 2. Open `chrome://extensions` (or `edge://extensions`).
@@ -13,6 +13,16 @@ Requires Chrome 130+ or a compatible Chromium browser (Edge, Brave, Arc). Incogn
 
 For an existing unpacked installation, use **Reload** on its extension card, then reload Twitch tabs. Keep the same installation and folder to retain saved accounts. Existing 1.0 slots are read directly; no migration or reinstallation is needed.
 
+### Firefox
+
+Firefox 128+ desktop supports temporary installation from the repository. Open
+`about:debugging#/runtime/this-firefox`, select **Load Temporary Add-on**, and
+choose `manifest.json`. Firefox removes temporary add-ons on restart. Ordinary
+persistent installation requires a Mozilla-signed package.
+
+Switchr manages Twitch accounts in Firefox’s default cookie store. Container
+tabs and private windows use separate sessions.
+
 ## Connect accounts
 
 - **Already signed in to Twitch?** Open Switchr and choose **Save current account**. The account name is detected from Twitch’s login cookie when available.
@@ -20,7 +30,7 @@ For an existing unpacked installation, use **Reload** on its extension card, the
 - **Add another account:** Choose **Connect another account**. Switchr first saves your current account and then opens a fresh Twitch login. Sign in, return to Switchr, and save. You can close the popup during this flow.
 - **Change your mind?** Choose **Cancel** to restore the browser session you had before starting the login.
 
-Use **Switch** for a saved account. All Twitch tabs in this browser profile share cookies and reload together. Switchr does not provide simultaneous account isolation; use separate browser profiles for that.
+Use **Switch** for a saved account. Twitch tabs in the default cookie store share cookies and reload together. Switchr does not provide simultaneous account isolation; use separate browser profiles for that.
 
 ## Session recovery
 
@@ -36,7 +46,7 @@ Old slots without account identity can still be switched to if their cookies hav
 
 ## Privacy
 
-Twitch session cookies are credentials. Switchr stores them in `chrome.storage.local`, restricts that storage to trusted extension contexts, and sends only account metadata to its Twitch content script. They are not uploaded, synced or exported. The popup uses system fonts and has no remote assets. Browser extension storage is not a separate encrypted vault. See [the privacy policy](docs/privacy.html).
+Twitch session cookies are credentials. Switchr uses protected extension storage in Chromium and extension-origin IndexedDB in Firefox, and sends only account metadata to its Twitch content script. They are not uploaded, synced or exported. The popup uses system fonts and has no remote assets. Browser extension storage is not a separate encrypted vault. See [the privacy policy](docs/privacy.html).
 
 ## Development and verification
 
@@ -52,6 +62,8 @@ npm run test:browser
 `npm run check` performs syntax checks and 22 Node tests for session capture, account identity, expiry, rollback, crash recovery, serialization, sender restrictions and legacy slots.
 
 The browser suite loads the real extension in a unique temporary Chromium profile and uses synthetic cookies plus a local Twitch page fixture. All external HTTP requests are blocked. It covers the actual cookie API, popup and widget flows, cancellation, storage restrictions, themes and layout. Screenshots are written to `.qa/`; the test profile is deleted on exit. It does not test real Twitch authentication or the live profile-menu selectors.
+
+Run `python tests/firefox.test.py` to verify saving, connecting and switching two accounts with synthetic cookies in a temporary Firefox profile. Set `FIREFOX_BINARY` if Firefox is outside your PATH.
 
 ## License
 
